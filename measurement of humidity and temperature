@@ -1,0 +1,43 @@
+int R_LED = 8; // assigning the Red LED of the RGB to be connected at pin 8
+ int B_LED = 7;// assigning 
+ int Buz= 5 ;
+ const int temp = 0; // assigning the temperature sensor pin connection
+void setup() 
+{
+ Serial.begin (9600);// opening serial comminication between the computer and Arduino
+ pinMode (R_LED, OUTPUT); // declaring the LED as an output
+ pinMode (B_LED, OUTPUT);
+ pinMode (Buz, OUTPUT);
+ pinMode (temp, INPUT); } 
+ void loop() 
+{
+ float Real_Voltage = analogRead(temp)* 0.004882814; // reading the sensor value and convert it to voltage
+ float Temp_C = Real_Voltage * 100.0;// changing the voltage into Celsius
+ float Temp_F = Temp_C * (9.0/5.0) + 32.0;
+ // printing the value of the serial monitor
+ //Serial.println(analogRead(temp));
+ Serial.print("Voltage: ");
+ Serial.println(Real_Voltage);
+ Serial.print("Deg C: ");
+ Serial.println(Temp_C);
+ Serial.print("Deg F: ");
+ Serial.println(Temp_F);
+ // check if the sensor is above the maximum limit 
+ if ( Temp_C >= 26.0)
+ {
+   Serial.println("Warning: The system is hot");
+     digitalWrite(B_LED, HIGH);// Blue LED on
+   analogWrite(Buz,80);
+   delay(2000);
+   digitalWrite(B_LED, LOW);
+   analogWrite(Buz,0);
+   delay(2000); // wait for a sec 
+ }
+ // check if the sensor is above the mimimum limit  
+ else if (Temp_C <= 20.0)
+ {
+   Serial.println("Warning: The system is cold");
+  digitalWrite(R_LED, HIGH); // Red LED on
+   analogWrite(Buz,20); 
+ }
+}
